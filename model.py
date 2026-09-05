@@ -26,11 +26,11 @@ def impute_nan_with_mean(X):
 def compute_iqr_bounds(X, k=1.5):
     # TODO: Compute per-column lower/upper clip bounds using the IQR rule.
     q1 = np.percentile(X, 25, axis = 0)
-    q2 = np.percentile(X, 75, axis = 0)
-    ikr = q2 - q1
-    q1 = q1 - k* ikr
-    q2 = q2 + k* ikr
-    return (q1, q2)
+    q3 = np.percentile(X, 75, axis = 0)
+    ikr = q3 - q1
+    lower = q1 - k* ikr
+    upper = q3 + k* ikr
+    return (lower, upper)
 
 # Step 3 - clip_columns
 def clip_columns(X, lower, upper):
@@ -83,8 +83,23 @@ def clip_columns(X, lower, upper):
 # Step 18 - residual_summary (not yet solved)
 # TODO: implement
 
-# Step 19 - prepare_cleaned_features (not yet solved)
-# TODO: implement
+# Step 19 - prepare_cleaned_features
+def prepare_cleaned_features(X, iqr_k=1.5):
+    """Impute NaNs then IQR-clip columns to produce a clean numeric matrix.
+
+    Args:
+        X: (N, F) array-like of floats, may contain NaN.
+        iqr_k: IQR multiplier passed to compute_iqr_bounds (default 1.5).
+
+    Returns:
+        (N, F) float ndarray with no NaNs, columns clipped to IQR bounds.
+    """
+    # TODO: Produce a clean numeric matrix via impute then IQR clip
+    X = impute_nan_with_mean(X)
+    q1, q2 = compute_iqr_bounds(X)
+    X = clip_columns(X, q1, q2)
+
+    return X
 
 # Step 20 - assemble_feature_matrix (not yet solved)
 # TODO: implement
