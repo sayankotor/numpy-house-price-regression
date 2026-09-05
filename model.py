@@ -96,7 +96,7 @@ def prepare_cleaned_features(X, iqr_k=1.5):
     """
     # TODO: Produce a clean numeric matrix via impute then IQR clip
     X = impute_nan_with_mean(X)
-    q1, q2 = compute_iqr_bounds(X)
+    q1, q2 = compute_iqr_bounds(X, iqr_k)
     X = clip_columns(X, q1, q2)
 
     return X
